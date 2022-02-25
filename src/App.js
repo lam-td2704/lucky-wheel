@@ -1,47 +1,47 @@
-import "./App.css";
-import Homepage from "./pages/homepage/homepage.page";
-import {
-  Routes,
-  Route,
-  useParams,
-  useSearchParams,
-  Link,
-} from "react-router-dom";
+import React from "react";
 
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
+
+import Homepage from "./pages/homepage/homepage.page";
 import Header from "./components/header/header.component";
 import SignInPage from "./pages/sign-in/sign-in.page.jsx";
 
-const User = (props) => {
-  const [search, setSearch] = useSearchParams();
-  return (
-    <div>
-      <h1>User List {search.get("id")}</h1>
-    </div>
-  );
-};
+import { auth } from "./components/firebase/firebase.utils";
 
-const UserDetail = (props) => {
-  const { userId } = useParams();
-  console.log(userId);
-  return (
-    <div>
-      <h1>User Deital</h1>
-    </div>
-  );
-};
+class App extends React.Component {
+  constructor() {
+    super();
 
-function App() {
-  return (
-    <div className="App">
-      <Header />
-      <Routes>
-        <Route index path="/" element={<Homepage />} />
-        <Route path="/login" element={<SignInPage />} />
-        <Route path="/users" element={<User />} />
-        <Route path="/users/:userId" element={<UserDetail />} />
-      </Routes>
-    </div>
-  );
+    this.state = {
+      currentUser: "",
+    };
+  }
+
+  unsubcribeFromAuth = null;
+
+  componentDidMount() {
+    this.unsubcribeFromAuth = auth.onAuthStateChanged((user) => {
+      this.setState({ currentUser: user });
+      console.log(user);
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubcribeFromAuth();
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <Header currentUser={this.state.currentUser} />
+        <Routes>
+          <Route index path="/" element={<Homepage />} />
+          <Route path="/login" element={<SignInPage />} />
+        </Routes>
+      </div>
+    );
+  }
 }
 
 export default App;
