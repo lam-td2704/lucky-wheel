@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 
 import Header from "./components/header/header.component";
+import SignInPage from "./pages/sign-in/sign-in.page.jsx";
 
 const User = (props) => {
   const [search, setSearch] = useSearchParams();
@@ -35,6 +36,7 @@ function App() {
       <Header />
       <Routes>
         <Route index path="/" element={<Homepage />} />
+        <Route path="/login" element={<SignInPage />} />
         <Route path="/users" element={<User />} />
         <Route path="/users/:userId" element={<UserDetail />} />
       </Routes>
