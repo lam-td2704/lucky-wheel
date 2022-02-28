@@ -26,7 +26,7 @@ class App extends React.Component {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
 
-        userRef.onSnapshot(snapShot => {
+        userRef.onSnapshot((snapShot) => {
           this.setState({
             currentUser: {
               id: snapShot.id,
@@ -36,7 +36,7 @@ class App extends React.Component {
         });
       }
 
-
+      this.setState({ currentUser: userAuth });
     });
   }
 
