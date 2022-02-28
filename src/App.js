@@ -1,7 +1,7 @@
 import React from "react";
 
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 
 import Header from "./components/header/header.component";
@@ -44,6 +44,13 @@ class App extends React.Component {
         <Routes>
           <Route index path="/" element={<Homepage />} />
           <Route path="/login" element={<SignInPage />} />
+          <Route
+            extract
+            path="/signup"
+            render={() =>
+              this.props.currentUser ? <Navigate to="/" /> : <SignInPage />
+            }
+          />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/home" element={<Homepage />} />
         </Routes>
@@ -52,8 +59,12 @@ class App extends React.Component {
   }
 }
 
+const mapStateToProps = ({ user }) => ({
+  currentUser: user,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
