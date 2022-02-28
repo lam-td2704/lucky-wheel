@@ -4,9 +4,28 @@ import { Link } from "react-router-dom";
 import "./header.styles.scss";
 
 import { ReactComponent as Logo } from "../../assets/nobugs.svg";
-import { auth } from "../firebase/firebase.utils";
+import { auth } from "../../firebase/firebase.utils";
 
 const Header = ({ currentUser }) => {
+  const renderMenuAfterSignIn = (currentUser) => {
+    if (currentUser) {
+      return (
+        <div
+          className="option"
+          onClick={() => auth.signOut()}
+          style={{ cursor: "pointer" }}
+        >
+          Sign Out
+        </div>
+      );
+    } else {
+      return (
+        <Link className="option" to="/login">
+          Login
+        </Link>
+      );
+    }
+  };
   return (
     <div className="header">
       <Link className="logo-container" to="/home">
@@ -17,7 +36,11 @@ const Header = ({ currentUser }) => {
           Contact
         </Link>
         {currentUser ? (
-          <div className="option" onClick={() => auth.signOut()}>
+          <div
+            className="option"
+            onClick={() => auth.signOut()}
+            style={{ cursor: "pointer" }}
+          >
             Sign Out
           </div>
         ) : (
@@ -25,6 +48,16 @@ const Header = ({ currentUser }) => {
             Login
           </Link>
         )}
+
+        {currentUser ? (
+          <div
+            className="option"
+            onClick={() => auth.signOut()}
+            style={{ cursor: "pointer" }}
+          >
+            {currentUser.displayName}
+          </div>
+        ) : null}
       </div>
     </div>
   );
