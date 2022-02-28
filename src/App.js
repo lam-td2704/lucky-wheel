@@ -6,8 +6,10 @@ import { connect } from "react-redux";
 
 import Header from "./components/header/header.component";
 import Homepage from "./pages/homepage/homepage.page";
-import SignInPage from "./pages/sign-in/sign-in.page.jsx";
-import SignUpPage from "./pages/sign-up/sign-up.page.jsx";
+import SignInPage from "./pages/sign-in/sign-in.page";
+import SignUpPage from "./pages/sign-up/sign-up.page";
+import ShopPage from "./pages/shop/shop.component";
+
 
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import { setCurrentUser } from "./redux/user/user.actions";
@@ -53,6 +55,7 @@ class App extends React.Component {
           />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/home" element={<Homepage />} />
+          <Route path="/shop" element={<ShopPage />} />
         </Routes>
       </div>
     );
