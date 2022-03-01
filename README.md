@@ -6,3 +6,5 @@
 - `State data can be modified by its own component, but is private (cannot be accessed from outside)`
 - Props can only be passed from parent component to child (unidirectional flow)
 - Modifying state should happen with the `setState()` method
+
+////
