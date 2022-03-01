@@ -9,10 +9,11 @@ import Homepage from "./pages/homepage/homepage.page";
 import SignInPage from "./pages/sign-in/sign-in.page";
 import SignUpPage from "./pages/sign-up/sign-up.page";
 import ShopPage from "./pages/shop/shop.component";
-
+import LuckyWheelPage from "./pages/lucky-wheel/lucky-wheel.page";
 
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import { setCurrentUser } from "./redux/user/user.actions";
+
 
 class App extends React.Component {
   unsubcribeFromAuth = null;
@@ -46,6 +47,7 @@ class App extends React.Component {
         <Routes>
           <Route index path="/" element={<Homepage />} />
           <Route path="/login" element={<SignInPage />} />
+          <Route path="/lucky-wheel" element={<LuckyWheelPage />} />
           <Route
             extract
             path="/signup"
