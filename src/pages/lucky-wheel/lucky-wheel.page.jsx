@@ -2,11 +2,14 @@ import React, { Component } from "react";
 import LuckyWheel from "../../components/lucky-wheel/lucky-wheel.component";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import "./lucky-wheel.styles.scss";
+import Table from "../../components/table/table.component";
+
 const client = new W3CWebSocket("ws://127.0.0.1:8000");
 class LuckyWheelPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: localStorage.getItem("name"),
       currentUsers: [],
       userActivity: [],
       username: null,
@@ -85,29 +88,94 @@ class LuckyWheelPage extends Component {
           percentpage: 0.05, // 60%
         },
       ],
+      table: {
+        rows: [
+          {
+            payment: "Payment #1",
+            date: "March 20, 1989",
+            amount: "$29.99",
+            payee: "John Smith",
+          },
+          {
+            payment: "Payment #2",
+            date: "March 22, 1989",
+            amount: "$40.00",
+            payee: "Brandon Drew",
+          },
+          {
+            payment: "Payment #3",
+            date: "April 2, 1989",
+            amount: "$9.50",
+            payee: "Jackie Chan",
+          },
+        ],
+        cols: {
+          payment: "Ten",
+          date: "Trang thai",
+        },
+      },
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.addRow = this.addRow.bind(this);
+  }
+
+  addRow(data) {
+    let oldData = this.state.table.rows;
+    this.setState({
+      table: {
+        rows: oldData.push(data),
+      },
+    });
+  }
+
+  checkUserName() {
+    return true;
   }
 
   componentWillMount() {
-    console.log(localStorage.getItem("name"))
+    let local_name = localStorage.getItem("name");
 
-      client.onopen = () => {
-        console.log("WebSocket Client Connected");
-      };
+    if (!local_name) {
+      let name = prompt("Vui long nhap ten cua ban", "Lam");
+      let da = { payment: name, date: Math.random(9999) };
+      this.addRow(da);
+      localStorage.setItem("name", da);
+    }
+
+    client.onopen = () => {
+      console.log("WebSocket Client Connected");
+    };
+
     client.onmessage = (message) => {
       const data = JSON.parse(message.data);
       this.setState({
-        rotate: data.username,
+        rotate: data.rote,
+        username: data.username,
       });
     };
   }
 
   handleChange = () => {
     let rand = this.randomIndex(this.state.prizes);
-    console.log(rand);
     let chances = rand;
+
+    let local_name = localStorage.getItem("name");
+
+    let name = local_name;
+    let da = { payment: name, date: Math.random(9999) };
+    let oldData;
+    if (!local_name) {
+      name = prompt("Vui long nhap ten cua ban", "Lam");
+      da = { payment: name, date: Math.random(9999) };
+    }
+    oldData = this.state.table.rows;
+    this.setState({
+      table: {
+        rows: oldData.push(da),
+      },
+    });
+
     this.setState(
       {
         rotate: {
@@ -118,7 +186,8 @@ class LuckyWheelPage extends Component {
         client.send(
           JSON.stringify({
             type: "aaaaa",
-            username: this.state.rotate,
+            rote: this.state.rotate,
+            username: localStorage.getItem("name"),
           })
         );
       }
@@ -218,12 +287,16 @@ class LuckyWheelPage extends Component {
 
   render() {
     return (
-      <div className="luck-wheel-page">
-        <LuckyWheel
-          handleChange={this.handleChange}
-          prizes={this.state.prizes}
-          rotate={this.state.rotate}
-        />
+      <div>
+        <h2>Danh sach nguoi tham gia</h2>
+        <Table columns={this.state.table.cols} rows={this.state.table.rows} />
+        <div className="luck-wheel-page">
+          <LuckyWheel
+            handleChange={this.handleChange}
+            prizes={this.state.prizes}
+            rotate={this.state.rotate}
+          />
+        </div>
       </div>
     );
   }
