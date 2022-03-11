@@ -10,6 +10,8 @@ import SignInPage from "./pages/sign-in/sign-in.page";
 import SignUpPage from "./pages/sign-up/sign-up.page";
 import ShopPage from "./pages/shop/shop.component";
 import LuckyWheelPage from "./pages/lucky-wheel/lucky-wheel.page";
+import ChatPage from "./pages/chat/chat.page";
+
 
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import { setCurrentUser } from "./redux/user/user.actions";
@@ -58,6 +60,7 @@ class App extends React.Component {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/home" element={<Homepage />} />
           <Route path="/shop" element={<ShopPage />} />
+          <Route path="/chat" element={<ChatPage />} />
         </Routes>
       </div>
     );

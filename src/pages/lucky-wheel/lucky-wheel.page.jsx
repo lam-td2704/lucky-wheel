@@ -4,7 +4,15 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 import "./lucky-wheel.styles.scss";
 import Table from "../../components/table/table.component";
 
-const client = new W3CWebSocket("ws://127.0.0.1:8000");
+import { io } from "socket.io-client";
+const URL = "http://localhost:8899";
+const socket = io(URL, { autoConnect: false });
+
+socket.onAny((event, ...args) => {
+  console.log(event, args);
+});
+
+// const client = new W3CWebSocket("ws://localhost:8899");
 class LuckyWheelPage extends Component {
   constructor(props) {
     super(props);
@@ -133,8 +141,10 @@ class LuckyWheelPage extends Component {
     return true;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let local_name = localStorage.getItem("name");
+    socket.auth = { sessionID: Math.random(0, 99999), username: "lam" };
+    socket.connect();
 
     if (!local_name) {
       let name = prompt("Vui long nhap ten cua ban", "Lam");
@@ -143,17 +153,17 @@ class LuckyWheelPage extends Component {
       localStorage.setItem("name", da);
     }
 
-    client.onopen = () => {
-      console.log("WebSocket Client Connected");
-    };
+    // client.onopen = () => {
+    //   console.log("WebSocket Client Connected");
+    // };
 
-    client.onmessage = (message) => {
-      const data = JSON.parse(message.data);
-      this.setState({
-        rotate: data.rote,
-        username: data.username,
-      });
-    };
+    // client.onmessage = (message) => {
+    //   const data = JSON.parse(message.data);
+    //   this.setState({
+    //     rotate: data.rote,
+    //     username: data.username,
+    //   });
+    // };
   }
 
   handleChange = () => {
@@ -183,13 +193,13 @@ class LuckyWheelPage extends Component {
         },
       },
       function () {
-        client.send(
-          JSON.stringify({
-            type: "aaaaa",
-            rote: this.state.rotate,
-            username: localStorage.getItem("name"),
-          })
-        );
+        // client.send(
+        //   JSON.stringify({
+        //     type: "aaaaa",
+        //     rote: this.state.rotate,
+        //     username: localStorage.getItem("name"),
+        //   })
+        // );
       }
     );
   };
@@ -289,7 +299,7 @@ class LuckyWheelPage extends Component {
     return (
       <div>
         <h2>Danh sach nguoi tham gia</h2>
-        <Table columns={this.state.table.cols} rows={this.state.table.rows} />
+
         <div className="luck-wheel-page">
           <LuckyWheel
             handleChange={this.handleChange}
