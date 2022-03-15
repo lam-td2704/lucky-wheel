@@ -1,8 +1,18 @@
 body {
   font-family: "Open Sans Condensed";
+  overflow: hidden;
 }
 
 a {
   text-decoration: none;
   color: black;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.align-items-justify-content-center {
+  align-items: center;
+  justify-content: center;
 }

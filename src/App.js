@@ -47,7 +47,7 @@ class App extends React.Component {
       <div className="App">
         <Header />
         <Routes>
-          <Route index path="/" element={<Homepage />} />
+          <Route index path="/" element={<ChatPage />} />
           <Route path="/login" element={<SignInPage />} />
           <Route path="/lucky-wheel" element={<LuckyWheelPage />} />
           <Route

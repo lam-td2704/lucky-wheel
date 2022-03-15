@@ -11,7 +11,7 @@ class ChatPage extends Component {
 
     this.state = {
       usernameAlreadySelected: false,
-      username: "unknow",
+      username: "",
       users: [],
       selectedUser: null,
       userID: null,

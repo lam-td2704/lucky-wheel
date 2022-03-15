@@ -2,84 +2,57 @@ import React, { Component } from "react";
 import "./direct-messaging.styles.scss";
 import socket from "../../socket";
 import LuckyWheel from "../../components/lucky-wheel/lucky-wheel.component";
+
+import {
+  randomIndex,
+  getPrize,
+} from "../../components/lucky-wheel/lucky-wheel.utils";
+
 class DirectMessaging extends Component {
   constructor(props) {
     super(props);
     this.state = {
       users: [],
       currentUser: null,
+      currentDeg: 0,
+      rotate: null,
       prizes: [
         {
           id: 1,
           text: "Lam",
           img: "images/Ao.png",
-          number: 1, // 1%,
-          percentpage: 0.1, // 1%
+          limitedMumberOfTimes: 1, // 1%,
+          percentpage: 0.9, // 1%
         },
         {
           id: 2,
           text: "Truong",
           img: "images/Non.png",
-          number: 1,
-          percentpage: 0.1, // 5%
+          limitedNumberOfTimes: 1,
+          percentpage: 0.0, // 5%
         },
         {
           id: 3,
           text: "Tan",
           img: "images/Vong.png",
-          number: 1,
           percentpage: 0.1, // 10%
         },
         {
           id: 4,
           text: "Nghien",
           img: "images/j2_logo.png",
-          number: 1,
-          percentpage: 0.2, // 24%
+          percentpage: 0.0, // 24%
         },
         {
           id: 5,
           text: "Hieu",
           img: "images/miss.png",
-          percentpage: 0.4, // 60%
-        },
-        {
-          id: 6,
-          text: "Dat",
-          img: "images/miss.png",
-          number: 2,
-          percentpage: 0.05, // 60%
-        },
-        {
-          id: 7,
-          text: "Huy",
-          img: "images/j2_logo.png",
-          number: 2,
-          percentpage: 0.05, // 60%
-        },
-        {
-          id: 8,
-          text: "Thien",
-          img: "images/j2_logo.png",
-          number: 2,
-          percentpage: 0.05, // 60%
-        },
-        {
-          id: 9,
-          text: "Truong nho",
-          img: "images/j2_logo.png",
-          number: 2,
-          percentpage: 0.05, // 60%
-        },
-        {
-          id: 10,
-          text: "Diem",
-          img: "images/j2_logo.png",
-          number: 2,
-          percentpage: 0.05, // 60%
+          percentpage: 0.0, // 60%
         },
       ],
     };
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -147,8 +120,25 @@ class DirectMessaging extends Component {
   }
 
   handleChange = () => {
+    let rand = randomIndex(this.state.prizes, false);
+    let chances = rand;
+    let p = getPrize({
+      chances: chances,
+      currentDeg: this.state.currentDeg,
+      prizeId: rand,
+      prizesTotal: this.state.prizes.length,
+    });
 
-  }
+    console.log(p);
+
+    this.setState({
+      rotate: {
+        transform: "rotate(" + p.deg + "deg)",
+      },
+      optsPrize: p.optsPrize,
+      currentDeg: p.deg,
+    });
+  };
 
   render() {
     const items = this.state.users.filter((item) => item.connected === true);
@@ -156,7 +146,7 @@ class DirectMessaging extends Component {
 
     return (
       <div className="wrapper">
-        <div className="container">
+        <div className="container flex flex-direction-row">
           <div className="flex flex-direction-column left">
             <div className="top">
               <input type="text" placeholder="Search" />
@@ -179,8 +169,8 @@ class DirectMessaging extends Component {
               ))}
             </ul>
           </div>
-          <div className="right">
-            <div className="top">
+          <div className="right flex flex-direction-column">
+            <div className="top flex">
               <span>
                 <span className="name">
                   Total joins:
@@ -193,11 +183,12 @@ class DirectMessaging extends Component {
               </span>
             </div>
 
-            <div>
+            <div className="chat-content flex h-100 align-items-justify-content-center">
               <LuckyWheel
                 handleChange={this.handleChange}
                 prizes={this.state.prizes}
                 rotate={this.state.rotate}
+                prizeLucky={this.state.optsPrize}
               />
             </div>
           </div>
