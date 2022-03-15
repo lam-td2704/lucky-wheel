@@ -19,14 +19,14 @@ class DirectMessaging extends Component {
       prizes: [
         {
           id: 1,
-          text: "Lam",
+          text: "Lâm",
           img: "images/Ao.png",
           limitedMumberOfTimes: 1, // 1%,
           percentpage: 0.9, // 1%
         },
         {
           id: 2,
-          text: "Truong",
+          text: "Trường Nhỏ",
           img: "images/Non.png",
           limitedNumberOfTimes: 1,
           percentpage: 0.0, // 5%
@@ -50,6 +50,7 @@ class DirectMessaging extends Component {
           percentpage: 0.0, // 60%
         },
       ],
+      listOfWinners: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -129,14 +130,20 @@ class DirectMessaging extends Component {
       prizesTotal: this.state.prizes.length,
     });
 
-    console.log(p);
-
     this.setState({
       rotate: {
         transform: "rotate(" + p.deg + "deg)",
       },
       optsPrize: p.optsPrize,
       currentDeg: p.deg,
+    });
+  };
+
+  updateListOfWinner = (list) => {
+    const { listOfWinners } = this.state;
+    listOfWinners.push(list);
+    this.setState({
+      listOfWinners: listOfWinners,
     });
   };
 
@@ -185,10 +192,11 @@ class DirectMessaging extends Component {
 
             <div className="chat-content flex h-100 align-items-justify-content-center">
               <LuckyWheel
-                handleChange={this.handleChange}
                 prizes={this.state.prizes}
                 rotate={this.state.rotate}
                 prizeLucky={this.state.optsPrize}
+                handleChange={this.handleChange}
+                updateListOfWinner={this.updateListOfWinner}
               />
             </div>
           </div>

@@ -20,6 +20,7 @@ class LuckyWheel extends Component {
 
   showItem = () => {
     const { prizeId } = this.props.prizeLucky;
+    this.props.updateListOfWinner(this.props.prizes[prizeId]);
     console.log(this.props.prizes[prizeId].text);
   };
 

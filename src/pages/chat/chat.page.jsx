@@ -71,7 +71,7 @@ class ChatPage extends Component {
   render() {
     return (
       <div>
-        <h2 style={{ textAlign: "center" }}>{this.state.sessionID}</h2>
+        <h2 style={{ textAlign: "center" }}>Winner list</h2>
         {this.state.usernameAlreadySelected ? (
           <DirectMessaging userID={this.state.userID}/>
         ) : (
